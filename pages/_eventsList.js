@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import SmartContractEvents from './_events';
+import OpenVotes from './_openVotes';
 
 const testContractAddress = "0xd4E96eF8eee8678dBFf4d535E033Ed1a4F7605b7";
 const testABI = 
@@ -11,6 +11,7 @@ const EventsList = () => {
   const [account, setAccount] = useState(null);
   const [network, setNetwork] = useState(null);
   const [error, setError] = useState(null);
+  const [web3, setWeb3] = useState(null);
 
   useEffect(() => {
     let web3;
@@ -46,7 +47,7 @@ const EventsList = () => {
     <p>Network: {network}</p>
     <br></br>
     <p>Events:</p>
-    <SmartContractEvents events={events}/>
+    <OpenVotes events={events}/>
     </div>
   );
 }
