@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import OpenVotes from './_openVotes';
+import OpenElections from './_openElections';
 
 const testContractAddress = "0xd4E96eF8eee8678dBFf4d535E033Ed1a4F7605b7";
 const testABI = 
@@ -13,14 +13,13 @@ const EventsList = () => {
   const [error, setError] = useState(null);
   const [web3, setWeb3] = useState(null);
 
-  useEffect(() => {
-    let web3;
+  useEffect(() => {   
 
     async function getEvents() {      
       // Check if in the browser and MetaMask is running.
       if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
         try {
-          web3 = new Web3(window.ethereum);
+          setWeb3(new Web3(window.ethereum));
           await window.ethereum.enable();
           const accounts = await web3.eth.getAccounts();
           setAccount(accounts[0].substring(0, 5) + "..." + accounts[0].substring(accounts[0].length - 4));
@@ -47,7 +46,7 @@ const EventsList = () => {
     <p>Network: {network}</p>
     <br></br>
     <p>Events:</p>
-    <OpenVotes events={events}/>
+    <OpenElections fred={web3}/>
     </div>
   );
 }
