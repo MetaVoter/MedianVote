@@ -2,9 +2,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { Web3Provider } from '../api/_web3Provider'
 import WalletInfo from './_walletInfo'
 import OpenElections from './_openElections'
+import { Web3Provider } from '../api/_web3Provider'
+import { InfuraProvider } from '@/api/_infuraProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,8 +19,10 @@ export default function Home() {
       </Head>
       <main className={styles.main}> 
         <Web3Provider>
-          <WalletInfo/>
-          <OpenElections/>
+            <WalletInfo/>
+            <InfuraProvider>
+              <OpenElections/>
+            </InfuraProvider>
         </Web3Provider>
       </main>
     </>

@@ -38,9 +38,8 @@ function Election(props) {
 
     return (
     <div>
-        <h4>Election - {electionId}</h4>
+        <h4><a href={ethscanURL}>Election</a> - {electionId}</h4>
         <ul>
-            <li><a href={ethscanURL}>See transaction</a></li>
             <li>Metadata URI: {props.event?.returnValues.metadataURI}</li>
             <li>Metadata Blob: {metadataBlob}</li>
         </ul>
