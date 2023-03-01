@@ -9,9 +9,9 @@ function ConvertByte32ToAscii(hexString){
 }
 
 function Election(props) {    
-    const ethscanURL = "https://sepolia.etherscan.io/tx/" + props.event.transactionHash;
-    const electionId = "0x" + props.event.returnValues.electionId.slice(2).padStart(64, "0");
-    const metadataBlob = ConvertByte32ToAscii(props.event.returnValues.metadataBlob);
+    const ethscanURL = "https://sepolia.etherscan.io/tx/" + props.event?.transactionHash;
+    const electionId = "0x" + props.event?.returnValues.electionId.slice(2).padStart(64, "0");
+    const metadataBlob = ConvertByte32ToAscii(props.event?.returnValues.metadataBlob);
     const web3 = useContext(Web3Context);
     
     //vote(bytes32 electionId, bytes calldata value)
@@ -27,9 +27,7 @@ function Election(props) {
                 if (error) {
                   console.log('Error:', error);
                 } else {
-                  if (transactionHash != undefined) {
-                    console.log('Transaction hash:', transactionHash);
-                  } 
+                  console.log('Transaction hash:', transactionHash);
                 }});            
             console.log("Result - " + JSON.stringify(result));
         }
@@ -43,12 +41,12 @@ function Election(props) {
         <h4>Election - {electionId}</h4>
         <ul>
             <li><a href={ethscanURL}>See transaction</a></li>
-            <li>Metadata URI: {props.event.returnValues.metadataURI}</li>
+            <li>Metadata URI: {props.event?.returnValues.metadataURI}</li>
             <li>Metadata Blob: {metadataBlob}</li>
         </ul>
         Vote: 
             <input type="text"/>
-            <button onClick={(event) => onVoteClick(event, props.event.returnValues.electionId)}>Vote</button>  
+            <button onClick={(event) => onVoteClick(event, props.event?.returnValues.electionId)}>Vote</button>  
         <br/>
         <br/>     
     </div>);
