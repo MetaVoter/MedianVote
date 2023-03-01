@@ -1,7 +1,7 @@
 
-import { Web3Context } from "./_web3Provider";
+import { Web3Context } from "../api/_web3Provider";
 import { useState, useEffect, useContext } from 'react';
-import { contractAddress, contractABI} from './_connectionConst'
+import { contractAddress, contractABI} from '../api/_connectionConst'
 
 function ConvertByte32ToAscii(hexString){
     const bytes = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));

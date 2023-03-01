@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { contractAddress, contractABI, INFURA_PROJECT_ID} from './_connectionConst'
+import { contractAddress, contractABI, INFURA_PROJECT_ID} from '../api/_connectionConst'
 import Election from './_election';
 import Web3 from "web3";
 

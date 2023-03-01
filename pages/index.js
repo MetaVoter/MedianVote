@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { Web3Provider } from './_web3Provider'
+import { Web3Provider } from '../api/_web3Provider'
 import WalletInfo from './_walletInfo'
 import OpenElections from './_openElections'
 

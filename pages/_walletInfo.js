@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Web3Context } from "./_web3Provider";
+import { Web3Context } from "../api/_web3Provider";
 
 function WalletInfo() {
     const [account, setAccount] = useState(null);
