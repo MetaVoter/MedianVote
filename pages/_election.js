@@ -27,7 +27,9 @@ function Election(props) {
                 if (error) {
                   console.log('Error:', error);
                 } else {
-                  console.log('Transaction hash:', transactionHash);
+                  if (transactionHash != undefined) {
+                    console.log('Transaction hash:', transactionHash);
+                  } 
                 }});            
             console.log("Result - " + JSON.stringify(result));
         }
