@@ -9,8 +9,9 @@ function OpenElections(props) {
   useEffect(() => {
     async function getOpenElections() { 
       try {
-        console.log(JSON.stringify(process.env));
-        const web3 = new Web3(`https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`);
+        //console.log(JSON.stringify(process.env));
+        console.log("INFURA_PROJECT_ID" + JSON.stringify(process.env.NEXT_PUBLIC_INFURA_KEY));
+        const web3 = new Web3("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY);
         //goerli, mainnet
         const contract = new web3.eth.Contract(contractABI, contractAddress); 
         const options = { fromBlock: '2990000', toBlock: 'latest' };
