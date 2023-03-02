@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { contractAddress, contractABI} from '../api/_connectionConst'
 import Election from './_election';
-import Web3 from "web3";
+import { ethers } from "ethers";
 //import { InfuraContext } from '@/api/_infuraProvider';
 
 function OpenElections(props) {
@@ -10,20 +10,27 @@ function OpenElections(props) {
 
   useEffect(() => {
     async function getOpenElections() { 
-      try {        
-        const web3_infura = new Web3("https://sepolia.infura.io/v3/" + "e9c4b4abcad34f62af2c0726d08eca08");
-        //const web3_infura = new Web3("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY); //goerli, mainnet
-        const contract = new web3_infura.eth.Contract(contractABI, contractAddress);
-        const options = { fromBlock: '2990000', toBlock: 'latest' };
-        const events = await contract.getPastEvents("ElectionCreated", options);
-        setEvents(events);
-      } 
-      catch (error) {
-        console.log("getOpenElections - Error (" + error.code + ") - " + error.message);
-      }
+        const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + "e9c4b4abcad34f62af2c0726d08eca08");        
+        //const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY);            
+        const contract = new ethers.Contract(contractAddress, contractABI, provider);
+        
+        const filter = {
+          address: contractAddress,
+          fromBlock: 2990000,
+          toBlock: 'latest',
+          topics: [ ethers.utils.id('ElectionCreated(bytes32,string,bytes)')]
+        };
+
+        contract.queryFilter(filter).then((events) => {
+            //console.log("Got votes" - JSON.stringify(events));
+            //events.forEach(element => console.log("Elections: " + element.args[0] + " - " + BigNumber.from(element.args[1]).fromTwos(32) + " - " + element.args[2]));                
+            setEvents(events);
+        }).catch((error) => {
+            console.log("getOpenElections - Error (" + error.code + ") - " + error.message);
+        });
     }
     getOpenElections();
-  }, []);
+  }, []);  
 
   const listItems = events?.map((item, index) => (
       <div key={index}>
