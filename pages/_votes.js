@@ -2,16 +2,16 @@ import { Chart } from "react-google-charts";
 //import { SimpleWordcloud } from "./_wordCloud";
 import { BigNumber } from "ethers";
 
-export const data = [
+/*const data = [
   ["Vote"],
   [69],
   [70],
   [70],
   [71],
   [72],
-];
+];*/
 
-export const options = {
+const options = {
   title: "Votes",
   legend: { position: "none" },
   histogram: {
@@ -22,7 +22,7 @@ export const options = {
   },
 };
 
-export function Votes(props) {
+function Votes(props) {
   
   const listItems = props?.votes?.map((item, index) => (
     <li key={index}>
@@ -44,3 +44,4 @@ export function Votes(props) {
   );
 }
 
+export default Votes;

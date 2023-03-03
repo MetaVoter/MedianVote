@@ -3,9 +3,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { contractAddress, contractABI } from '../api/_connectionConst';
 import { ethers, BigNumber } from "ethers";
-import { Votes } from './_votes';
+import Votes from './_votes';
 import { VoteCollection, VoteInformation } from '@/api/_voteCollection';
-import { Volkhov } from 'next/font/google';
 
 function Election(props) {  
     const [votes, setVotes] = useState(null);   
@@ -91,7 +90,7 @@ function Election(props) {
             setIsValidVote(false);
             return;
         }
-        
+
         const parsedVote = parseInt(currentVote);
         if ((minValue != null && parsedVote < minValue) ||
             (maxValue != null && parsedVote > maxValue)) {
