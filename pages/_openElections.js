@@ -10,6 +10,7 @@ function OpenElections(props) {
 
   useEffect(() => {
     async function getOpenElections() { 
+        console.log("getOpenElections");
         const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + "e9c4b4abcad34f62af2c0726d08eca08");        
         //const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY);            
         const contract = new ethers.Contract(contractAddress, contractABI, provider);

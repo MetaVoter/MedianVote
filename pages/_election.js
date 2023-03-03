@@ -1,9 +1,11 @@
 
 //import { Web3Context } from "../api/_web3Provider";
 import { useState, useEffect, useContext } from 'react';
-import { contractAddress, contractABI} from '../api/_connectionConst'
+import { contractAddress, contractABI } from '../api/_connectionConst';
 import { ethers, BigNumber } from "ethers";
-//import { BigNumber } from "@ethersproject/bignumber";  //TODO don't need?
+import { Votes } from './_votes';
+import { VoteCollection, VoteInformation } from '@/api/_voteCollection';
+import { Volkhov } from 'next/font/google';
 
 function Election(props) {  
     const [votes, setVotes] = useState(null);   
@@ -12,17 +14,19 @@ function Election(props) {
     const [description, setDescription] = useState(null);
     const [minValue, setMinValue] = useState(null);
     const [maxValue, setMaxValue] = useState(null);
+    const [isValidVote, setIsValidVote]  = useState(true);
     const [currentVote, setCurrentVote] = useState("");
+    const [median, setMedian] = useState(null);
+    const [chartData, setChartData] = useState(null);
     const ethscanURL = "https://sepolia.etherscan.io/tx/" + props.event?.transactionHash;
     const electionId = props.event?.args[0];
     const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
     //const web3 = useContext(Web3Context);
     
     useEffect(() => {
-        function getMetadata(){  
-            console.log(JSON.stringify(props.event));
+        function getMetadata(){
             try {                
-                console.log("getMetadata");
+                //console.log("getMetadata");
                 console.log("Metablob - " + typeof(props.event?.args[2]));
                 const metadataBlob = ethers.utils.toUtf8String(props.event?.args[2]);
                 setMetadataBlob(metadataBlob);
@@ -38,17 +42,19 @@ function Election(props) {
             } 
             catch (error){
                 console.log("getMetadata - Error (" + error.code + ") - " + error.message);
+                console.log("metadataBlob - " + JSON.stringify(metadataBlob));
             }
         }
         getMetadata();
     }, []);
 
     useEffect(() => {
-        async function getVotes() { 
+        async function getVotes() {
+            console.log("getVotes");
             const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + "e9c4b4abcad34f62af2c0726d08eca08");        
             //const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY);            
-            const contract = new ethers.Contract(contractAddress, contractABI, provider);
-
+            const contract = new ethers.Contract(contractAddress, contractABI, provider); 
+ 
             const filter = {
                 address: contractAddress,
                 fromBlock: 2990000,
@@ -56,10 +62,23 @@ function Election(props) {
                 topics: [ ethers.utils.id('Vote(address,bytes,bytes32)'), null, electionId]
             };
 
-            contract.queryFilter(filter).then((events) => {
-                //console.log("Got votes" - JSON.stringify(events));
-                //events.forEach(element => console.log("Votes: " + element.args[0] + " - " + BigNumber.from(element.args[1]).fromTwos(32) + " - " + element.args[2]));                
+            contract.queryFilter(filter).then((events) => { 
                 setVotes(events);
+                console.log("Election - " + electionIdString);
+                events.forEach(element => 
+                    console.log("Votes: " + element.args[0].substring(0, 5) + "..." + element.args[0].substring(element.args[0].length - 4) +
+                    " - " + BigNumber.from(element.args[1]).fromTwos(32) + " - " + element.blockNumber)
+                );
+                
+                let votes = new VoteCollection(minValue, maxValue);
+                events?.forEach(event => {
+                    votes.addVoteInfo(new VoteInformation(event.args[0], BigNumber.from(event.args[1]).fromTwos(32)));
+                });                
+                setMedian(votes.calculateMedian());
+
+                let chartData = ["Votes"].concat(votes.values).map(value => [value]);
+                setChartData(chartData);
+
             }).catch((error) => {
                 console.log("getVotes - Error (" + error.code + ") - " + error.message);
             });
@@ -68,49 +87,53 @@ function Election(props) {
     }, []);
     
     async function onVoteClick(event, electionId) {
-        try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            //await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(contractAddress, contractABI, signer);
-            const parsedVote = parseInt(currentVote);
-
-            // Call a function on the contract
-            const result = await contract.vote(electionId,  BigNumber.from(parsedVote).toTwos(32));
-            console.log(result);
+        if (isNaN(currentVote)) {
+            setIsValidVote(false);
+            return;
         }
-        catch (error) {
-            console.log("onVoteClick - Error (" + error.code + ") - " + error.message);
+        
+        const parsedVote = parseInt(currentVote);
+        if ((minValue != null && parsedVote < minValue) ||
+            (maxValue != null && parsedVote > maxValue)) {
+            setIsValidVote(false);
         }
-    }       
+        else {
+            try {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                //await provider.send("eth_requestAccounts", []);
+                const signer = provider.getSigner();
+                const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    
+                // Call a function on the contract
+                const result = await contract.vote(electionId,  BigNumber.from(parsedVote).toTwos(32));
+                console.log(result);
+            }
+            catch (error) {
+                console.log("onVoteClick - Error (" + error.code + ") - " + error.message);
+            }
+        }        
+    }     
+    
+    function onChangeVote(event){
+        let vote = event.target.value;
+        setIsValidVote(true);
+        setCurrentVote(vote);
+    }
 
-    //<div>{item.returnValues?.voter} - {item.returnValues?.value} - {item.returnValues?.electionId}</div>
-    //- {item.args[2]}
-    const listItems = votes?.map((item, index) => (
-        <li key={index}>
-          <div>{item.args[0]} : {BigNumber.from(item.args[1]).fromTwos(32).toString()}</div>
-        </li>
-    ));
     return (
     <div>
-        <h4><a href={ethscanURL}>Election</a> - {name}</h4>
-        <ul>
-            <li>{electionIdString}</li>
-            <li>{description}</li>
-            <li>{minValue} to {maxValue}</li>
-            <li>Metadata Blob: {metadataBlob}</li>
-        </ul>
+        <h2><a href={ethscanURL} id={electionIdString}>{name}</a></h2><br/>
+        <h3>Median Vote: {median}</h3><br/>
+        <i>{description} ({minValue} to {maxValue})</i>
         <br/>
-        <div>
-            <h4>Votes:</h4>
-            <ol>{listItems}</ol>
-        </div>
         <br/>
         Vote: 
-            <input type="text" value={currentVote} onChange={(e) => setCurrentVote(e.target.value)}/>
-            <button onClick={(event) => onVoteClick(event, electionId)}>Vote</button>  
+            <input type="text" value={currentVote} onChange={onChangeVote}/>
+            <button onClick={(event) => onVoteClick(event, electionId)}>Vote</button>
+            {isValidVote ? <p></p> : <p>Invalid vote (out of range or not a number).</p>}
         <br/>
-        <br/>     
+        <br/>
+        <Votes votes={votes} chartData={chartData}/>  
     </div>);
 }
 

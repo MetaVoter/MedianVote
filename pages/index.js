@@ -7,6 +7,7 @@ import OpenElections from './_openElections'
 import { Web3Provider } from '../api/_web3Provider'
 import { InfuraProvider } from '@/api/_infuraProvider'
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -18,13 +19,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}> 
-        <Web3Provider>
-            <WalletInfo/>
-            <InfuraProvider>
-              <OpenElections/>
-            </InfuraProvider>
-        </Web3Provider>
+        <OpenElections/>
       </main>
     </>
   )
 }
+
+/*<Web3Provider>
+            <WalletInfo/>
+            <InfuraProvider>
+              <OpenElections/>
+            </InfuraProvider>
+        </Web3Provider>*/
