@@ -5,8 +5,6 @@ import styles from '@/styles/Home.module.css'
 import WalletInfo from './_walletInfo'
 import OpenElections from './_openElections'
 import { Web3Provider } from '../api/_web3Provider'
-import { InfuraProvider } from '@/api/_infuraProvider'
-
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +16,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}> 
+      <main className={styles.main}>
         <OpenElections/>
       </main>
     </>

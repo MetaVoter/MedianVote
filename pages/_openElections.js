@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { contractAddress, contractABI} from '../api/_connectionConst'
-import Election from './_election';
+import ElectionResults from './_electionResults';
 import { ethers } from "ethers";
-//import { InfuraContext } from '@/api/_infuraProvider';
+import VoteOnElection from './_voteOnElection';
 
 function OpenElections(props) {
   const [events, setEvents] = useState(null);
@@ -33,12 +33,46 @@ function OpenElections(props) {
     getOpenElections();
   }, []);  
 
-  const listItems = events?.map((item, index) => (
+  function parseMetadata(electionEvent){
+    let parsedMetadata = null;
+    try {
+      const metadataBlob = ethers.utils.toUtf8String(electionEvent.args[2]);
+      parsedMetadata = JSON.parse(metadataBlob);
+      //console.log("parsedMetadata - " + JSON.stringify(parsedMetadata));
+    } 
+    catch (error) {
+        console.log("parseMetadata - Error (" + error.code + ") - " + error.message);
+        console.log("parsedMetadata - " + JSON.stringify(parsedMetadata));
+    }
+    return parsedMetadata;
+  }
+
+  const votes = events?.map((item, index) => {
+      const parsedMetadata = parseMetadata(item);
+      return (
       <div key={index}>
-        <Election event={item}/>
-      </div>
-  ));
-  return <div>{listItems}</div>;
+        <VoteOnElection event={item}
+                  minValue={parsedMetadata?.minValue} 
+                  maxValue={parsedMetadata?.maxValue}
+                  name={parsedMetadata?.name}
+                  description={parsedMetadata?.description} />
+        <br/>
+        <br/>
+      </div>);
+  });
+  const electionResults = events?.map((item, index) => {
+      const parsedMetadata = parseMetadata(item);
+      return (
+      <div key={index}>
+        <ElectionResults event={item} 
+                  minValue={parsedMetadata?.minValue} 
+                  maxValue={parsedMetadata?.maxValue}
+                  name={parsedMetadata?.name}
+                  description={parsedMetadata?.description} />
+      </div>);
+  });
+  const list = (props.showResults ? electionResults : votes);
+  return <div><div>{list}</div></div>;
 }
 
 export default OpenElections;
