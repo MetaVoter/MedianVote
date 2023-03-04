@@ -10,8 +10,8 @@ function ElectionResults(props) {
     const [median, setMedian] = useState(null);
     const [chartData, setChartData] = useState(null);
     const [countsByNetwork, setCountsByNetwork] = useState(new Map());
-    const electionId = props.event?.args[0];
-    const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
+    const electionId = props.electionId;
+    const electionIdString = props.electionIdString;
     //const web3 = useContext(Web3Context);
 
     function getVotesOneNetwork(networkInfo) {
