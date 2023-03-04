@@ -76,12 +76,12 @@ function Votes(props) {
           },
         },
         {
-          value: countsByNetwork.get(11155111) || 1,
+          value: countsByNetwork?.get(11155111) || 1,
           name: "sepolia",
           color: "purple"
         },
         {
-          value: countsByNetwork.get(5) || 1,
+          value: countsByNetwork?.get(5) || 1,
           name: "goerli",
           color: "red"
         }
