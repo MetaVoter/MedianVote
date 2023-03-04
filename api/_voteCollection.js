@@ -20,7 +20,7 @@ export class VoteCollection {
         if (this.minValue != null && voteInfo.value < this.minValue)
             return false; 
         if (this.maxValue != null && voteInfo.value > this.maxValue)
-            return false; 
+            return false;
         return true;
     }
 
@@ -33,10 +33,13 @@ export class VoteCollection {
                 return;
             }
         }
-        this.countsByNetwork.set(voteInfo.network, this.countsByNetwork.get(voteInfo.network) + 1);
+
         if (this.inRange(voteInfo)){
+            this.countsByNetwork.set(voteInfo.network, this.countsByNetwork.get(voteInfo.network) + 1);
             let oldVoteInfo = this.voteInfoHash[voteInfo.voter];
-            this.countsByNetwork.set(oldVoteInfo.network, this.countsByNetwork.get(oldVoteInfo.network) - 1)
+            if(oldVoteInfo && oldVoteInfo.network){
+                this.countsByNetwork.set(oldVoteInfo.network, this.countsByNetwork.get(oldVoteInfo.network) - 1);
+            }
             this.voteInfoHash[voteInfo.voter] = voteInfo; //latest will override if existing
         }
     }
