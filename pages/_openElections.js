@@ -1,23 +1,22 @@
 import { useState, useEffect, useContext } from 'react';
-import { contractAddress, contractABI} from '../api/_connectionConst'
 import ElectionResults from './_electionResults';
 import { ethers } from "ethers";
 import VoteOnElection from './_voteOnElection';
+import { contractABI, networks } from '@/api/_networkInfo';
 
 function OpenElections(props) {
-  const [events, setEvents] = useState(null);
+  const [events, setEvents] = useState(null);  
   //const contract = useContext(InfuraContext);
 
   useEffect(() => {
     async function getOpenElections() { 
         console.log("getOpenElections");
-        const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + "e9c4b4abcad34f62af2c0726d08eca08");        
-        //const provider = new ethers.providers.JsonRpcProvider("https://sepolia.infura.io/v3/" + process.env.NEXT_PUBLIC_INFURA_KEY);            
-        const contract = new ethers.Contract(contractAddress, contractABI, provider);
+        const provider = new ethers.providers.JsonRpcProvider(networks[11155111].rpcProvider);           
+        const contract = new ethers.Contract(networks[11155111].contractAddress, contractABI, provider);
         
         const filter = {
-          address: contractAddress,
-          fromBlock: 2990000,
+          address: networks[11155111].contractAddress,
+          fromBlock: networks[11155111].fromBlock,
           toBlock: 'latest',
           topics: [ ethers.utils.id('ElectionCreated(bytes32,string,bytes)')]
         };

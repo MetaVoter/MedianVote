@@ -23,12 +23,7 @@ const options = {
 };
 
 function Votes(props) {
-  
-  const listItems = props?.votes?.map((item, index) => (
-    <li key={index}>
-      <div>{item.args[0]} : {BigNumber.from(item.args[1]).fromTwos(32).toString()}</div>
-    </li>
-  ));
+
   return (
     <div>
       <Chart

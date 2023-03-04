@@ -1,13 +1,12 @@
 
 //import { Web3Context } from "../api/_web3Provider";
 import { useState, useContext } from 'react';
-import { contractAddress, contractABI } from '../api/_connectionConst';
 import { ethers, BigNumber } from "ethers";
+import { contractABI, networks } from '@/api/_networkInfo';
 
 function VoteOnElection(props) {
     const [isValidVote, setIsValidVote]  = useState(true);
     const [currentVote, setCurrentVote] = useState("");
-    const ethscanURL = "https://sepolia.etherscan.io/tx/" + props.event?.transactionHash;
     const electionId = props.event?.args[0];
     const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
     //const web3 = useContext(Web3Context);
@@ -28,7 +27,9 @@ function VoteOnElection(props) {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 //await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
-                const contract = new ethers.Contract(contractAddress, contractABI, signer);
+                const network = await provider.getNetwork();
+                console.log("Network - " + network.chainId);
+                const contract = new ethers.Contract(networks[network.chainId].contractAddress, contractABI, signer);
     
                 // Call a function on the contract
                 const result = await contract.vote(electionId,  BigNumber.from(parsedVote).toTwos(32));
@@ -48,7 +49,7 @@ function VoteOnElection(props) {
 
     return (
     <div>
-        <h2><a href={ethscanURL} id={electionIdString}>{props.name}</a></h2><br/>
+        <h2><div id={electionIdString}>{props.name}</div></h2><br/>
         <i>{props.description} ({props.minValue} to {props.maxValue})</i>
         <br/>
         <br/>
