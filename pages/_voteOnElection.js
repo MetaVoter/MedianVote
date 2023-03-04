@@ -65,12 +65,12 @@ function VoteOnElection(props) {
     return (
     <div>
         <h2><div id={electionIdString}>{props.name}</div></h2><br/>
-        <i>{props.description} ({props.minValue} to {props.maxValue})</i>
+        <i>{props.description} </i>
         <br/>
         <br/>
         <input type="text" value={currentVote} onChange={onChangeVote} style={inputStyles}/>
         <button onClick={(event) => onVoteClick(event, electionId)} style={buttonStyles}>Vote</button>
-        {isValidVote ? <p></p> : <p>Invalid vote (out of range or not a number).</p>}
+        {isValidVote ? <p></p> : <p>Vote is out of range ({props.minValue} to {props.maxValue}) or not a number.</p>}
     </div>);
 }
 
