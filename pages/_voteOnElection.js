@@ -4,6 +4,21 @@ import { useState, useContext } from 'react';
 import { ethers, BigNumber } from "ethers";
 import { contractABI, networks } from '@/api/_networkInfo';
 
+const inputStyles = {
+    padding: '10px',
+    fontSize: '16px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    boxSizing: 'border-box',
+    outline: 'none'
+  };
+
+  const buttonStyles = {
+    fontSize: '16px',
+    margin: '10px',
+    padding: '10px'
+  }
+
 function VoteOnElection(props) {
     const [isValidVote, setIsValidVote]  = useState(true);
     const [currentVote, setCurrentVote] = useState("");
@@ -53,10 +68,9 @@ function VoteOnElection(props) {
         <i>{props.description} ({props.minValue} to {props.maxValue})</i>
         <br/>
         <br/>
-        Vote: 
-            <input type="text" value={currentVote} onChange={onChangeVote}/>
-            <button onClick={(event) => onVoteClick(event, electionId)}>Vote</button>
-            {isValidVote ? <p></p> : <p>Invalid vote (out of range or not a number).</p>}
+        <input type="text" value={currentVote} onChange={onChangeVote} style={inputStyles}/>
+        <button onClick={(event) => onVoteClick(event, electionId)} style={buttonStyles}>Vote</button>
+        {isValidVote ? <p></p> : <p>Invalid vote (out of range or not a number).</p>}
     </div>);
 }
 
