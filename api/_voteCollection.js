@@ -17,14 +17,15 @@ export class VoteCollection {
     }
 
     inRange(voteInfo) {
-        if (this.minValue != null && voteInfo.value < this.minValue)
-            return false; 
-        if (this.maxValue != null && voteInfo.value > this.maxValue)
+        if ((this.minValue != null && voteInfo.value < this.minValue) ||
+            (this.maxValue != null && voteInfo.value > this.maxValue)){
             return false;
+        }
         return true;
     }
 
     addVoteInfo(voteInfo) {
+        // If value is a BigInt convert to Int if can (BigInt not supported)
         if (typeof voteInfo.value === "object") {
             try {
                 voteInfo.value = Number(voteInfo.value);
@@ -48,7 +49,6 @@ export class VoteCollection {
         const valuesArray = Object.values(this.voteInfoHash);
         valuesArray.sort((a, b) => a.value - b.value);
         this.values = valuesArray.map(obj => obj.value);
-        //console.log("Median - " + JSON.stringify(valuesArray));
         console.log("Median - " + JSON.stringify(this.values));
 
         let median = 5;
