@@ -9,7 +9,7 @@ import { contractABI, networks } from '@/api/_networkInfo';
 function ElectionResults(props) {
     const [median, setMedian] = useState(null);
     const [chartData, setChartData] = useState(null);
-    const [countsByNetwork, setCountsByNetwork] = useState({});
+    const [countsByNetwork, setCountsByNetwork] = useState(new Map());
     const electionId = props.event?.args[0];
     const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
     //const web3 = useContext(Web3Context);
@@ -50,7 +50,7 @@ function ElectionResults(props) {
 
                 let chartData = ["Votes"].concat(voteCollection.values).map(value => [value]);
                 setChartData(chartData);
-                setCountsByNetwork(votes.countsByNetwork);
+                setCountsByNetwork(voteCollection.countsByNetwork);
 
             } catch(error) {
                 console.log("getVotes - Error (" + error.code + ") - " + error.message);
