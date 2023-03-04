@@ -33,3 +33,6 @@ yarn-error.log*
 pages/junk.txt
 MedianVote.env
 package-lock.json
+MedianVote.env.local
+package-lock.json
+package-lock.json

@@ -5,8 +5,7 @@ import VoteOnElection from './_voteOnElection';
 import { contractABI, networks } from '@/api/_networkInfo';
 
 function OpenElections(props) {
-  const [events, setEvents] = useState(null);  
-  //const contract = useContext(InfuraContext);
+  const [events, setEvents] = useState(null);
 
   useEffect(() => {
     async function getOpenElections() { 
