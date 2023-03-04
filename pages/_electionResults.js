@@ -46,6 +46,7 @@ function ElectionResults(props) {
 
                 let chartData = ["Votes"].concat(votes.values).map(value => [value]);
                 setChartData(chartData);
+                setCountsByNetwork(votes.countsByNetwork);
 
             }).catch((error) => {
                 console.log("getVotes - Error (" + error.code + ") - " + error.message);
