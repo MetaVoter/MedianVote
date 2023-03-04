@@ -1,8 +1,9 @@
 
 export class VoteInformation {
-    constructor(voter, value) {
+    constructor(voter, value, network) {
       this.voter = voter;
       this.value = value;
+      this.network = network;
     } 
 } 
 
@@ -12,6 +13,7 @@ export class VoteCollection {
         this.maxValue = maxValue;
         this.voteInfoHash = {}; 
         this.values = [];
+        this.countsByNetwork = new Map();
     }
 
     inRange(voteInfo) {
@@ -31,7 +33,10 @@ export class VoteCollection {
                 return;
             }
         }
+        this.countsByNetwork.set(voteInfo.network, this.countsByNetwork.get(voteInfo.network) + 1);
         if (this.inRange(voteInfo)){
+            let oldVoteInfo = this.voteInfoHash[voteInfo.voter];
+            this.countsByNetwork.set(oldVoteInfo.network, this.countsByNetwork.get(oldVoteInfo.network) - 1)
             this.voteInfoHash[voteInfo.voter] = voteInfo; //latest will override if existing
         }
     }

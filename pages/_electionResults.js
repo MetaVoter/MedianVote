@@ -10,6 +10,7 @@ function ElectionResults(props) {
     const [votes, setVotes] = useState(null);
     const [median, setMedian] = useState(null);
     const [chartData, setChartData] = useState(null);
+    const [countsByNetwork, setCountsByNetwork] = useState({});
     const ethscanURL = "https://sepolia.etherscan.io/tx/" + props.event?.transactionHash;
     const electionId = props.event?.args[0];
     const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
@@ -39,7 +40,7 @@ function ElectionResults(props) {
                 
                 let votes = new VoteCollection(props.minValue, props.maxValue);
                 events?.forEach(event => {
-                    votes.addVoteInfo(new VoteInformation(event.args[0], BigNumber.from(event.args[1]).fromTwos(32)));
+                    votes.addVoteInfo(new VoteInformation(event.args[0], BigNumber.from(event.args[1]).fromTwos(32)),"sepolia");
                 });                
                 setMedian(votes.calculateMedian());
 
@@ -60,7 +61,7 @@ function ElectionResults(props) {
         <i>{props.description} ({props.minValue} to {props.maxValue})</i>
         <br/>
         <br/>
-        <Votes votes={votes} chartData={chartData}/>  
+        <Votes votes={votes} chartData={chartData} countsByNetwork={countsByNetwork}/>
     </div>);
 }
 
