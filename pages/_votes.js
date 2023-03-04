@@ -1,6 +1,16 @@
 import { Chart } from "react-google-charts";
 //import { SimpleWordcloud } from "./_wordCloud";
 import { BigNumber } from "ethers";
+import Highcharts from 'highcharts'
+import HighchartsExporting from 'highcharts/modules/exporting'
+import HighchartsReact from 'highcharts-react-official'
+import HC_more from 'highcharts/highcharts-more' //module
+
+if (typeof Highcharts === 'object') {
+  HighchartsExporting(Highcharts);
+  HC_more(Highcharts) //init module
+}
+
 
 /*const data = [
   ["Vote"],
@@ -35,6 +45,12 @@ function Votes(props) {
       />
       <br/>
       <br/>
+      <div>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={chartOptions}
+        />
+      </div>
     </div>
   );
 }
