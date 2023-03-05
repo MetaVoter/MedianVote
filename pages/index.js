@@ -1,31 +1,19 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import PageTemplate from "./_pageTemplate"
+import ElectionsToVoteOn from "./_electionsToVoteOn";
 
 const inter = Inter({ subsets: ['latin'] })
 
-import { Web3Button, Web3NetworkSwitch } from '@web3modal/react'
+const supportedElections = [
+  "0x171aa729ae009b3d66ca96fbe7f3deb88437470180cc2df2bad1671ed8420e2c"
+];
 
-export default function Home() {
+export default function Home() {  
   return (
-    <>
-      <Head>
-        <title>Votes</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <table>
-          <tbody>
-            <tr>
-              <td><Web3Button icon="show" label="Connect Wallet" balance="show" /></td>
-              <td><Web3NetworkSwitch /></td>
-            </tr>
-          </tbody>
-        </table>
-        <br/>
-        <br/>
-      </main>
-    </>
-  )
+    <div>
+      <PageTemplate ComponentToRender={ElectionsToVoteOn} supportedElections={supportedElections} />
+    </div>
+  );
 }

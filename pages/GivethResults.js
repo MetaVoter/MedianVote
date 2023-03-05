@@ -11,7 +11,7 @@ const supportedElections = [
 
 function GivethResults() {
     return (
-      <PageTemplate ComponentToRender={GetElectionResults} supportedElections={supportedElections} />
+      <PageTemplate ComponentToRender={GetElectionResults} supportedElections={supportedElections} networkId={11155111}/>
     );
 }
 
