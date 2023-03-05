@@ -1,5 +1,6 @@
 import PageTemplate from "./_pageTemplate"
 import GetElectionResults from "./_getElectionResults";
+import { useRouter } from 'next/router';
 
 const supportedElections = [
     "0x8e1fa6e71ff1b6dd1d7feab2285f1406c02a462a24f2089f1bc882eabc9b886b",
@@ -10,8 +11,10 @@ const supportedElections = [
 ];
 
 function GivethResults() {
+  const router = useRouter();
+  const interval = router.query["interval"];
     return (
-      <PageTemplate ComponentToRender={GetElectionResults} supportedElections={supportedElections} networkId={11155111}/>
+      <PageTemplate ComponentToRender={GetElectionResults} supportedElections={supportedElections} networkId={11155111} interval={interval}/>
     );
 }
 
