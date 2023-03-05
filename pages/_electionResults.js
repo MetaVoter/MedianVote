@@ -22,7 +22,7 @@ function ElectionResults(props) {
             topics: [ ethers.utils.id('Vote(address,bytes,bytes32)'), null, electionId]
         };
 
-        return contract.queryFilter(filter, networkInfo.fromBlock, 'latest');
+        return contract.queryFilter(filter, networkInfo.fromBlock, 'latest').catch(e => { console.error(e) });
     }
 
     async function getVotesAllNetworks() {
