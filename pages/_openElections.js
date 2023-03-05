@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import ElectionResults from './_electionResults';
-import { ethers } from "ethers";
 import VoteOnElection from './_voteOnElection';
-import { contractABI, networks } from '@/api/_networkInfo';
+import { getElectionEvents, parseMetadata, electionIdToString} from '@/api/_getElections'
 
 const supportedElectionsSepolia = [
   "0xa4a02534a899c2a162c9690d8f7a03f07496a48e77da6cc5c2d3a797ae47a568",
@@ -18,53 +17,19 @@ const supportedElectionsGnosis = [
 ];
 
 const supportedElections = supportedElectionsGnosis;
-const networkWithContractMetadata = 100; //11155111;
 
 function OpenElections(props) {
   const [events, setEvents] = useState(null);
 
   useEffect(() => {
     async function getOpenElections() { 
-        console.log("getOpenElections");
-        const provider = new ethers.providers.JsonRpcProvider(networks[networkWithContractMetadata].rpcProvider);           
-        const contract = new ethers.Contract(networks[networkWithContractMetadata].contractAddress, contractABI, provider);
-        
-        const filter = {
-          address: networks[networkWithContractMetadata].contractAddress,
-          topics: [ ethers.utils.id('ElectionCreated(bytes32,string,bytes)')]
-        };
-
-        contract.queryFilter(filter, networks[networkWithContractMetadata].fromBlock, 'latest').then((events) => {
-          //console.log("Got votes" - JSON.stringify(events));
-          //events.forEach(element => console.log("Elections: " + element.args[0] + " - " + BigNumber.from(element.args[1]).fromTwos(32) + " - " + element.args[2]));                
-          setEvents(events);
-        }).catch((error) => {
-            console.log("getOpenElections - Error (" + error.code + ") - " + error.message);
-        });
+        const events = await getElectionEvents(supportedElectionsGnosis);
+        setEvents(events);
     }
     getOpenElections();
   }, []);
 
-  function parseMetadata(electionEvent){
-    let parsedMetadata = null;
-    try {
-      const metadataBlob = ethers.utils.toUtf8String(electionEvent.args[2]);
-      parsedMetadata = JSON.parse(metadataBlob);
-      //console.log("parsedMetadata - " + JSON.stringify(parsedMetadata));
-    } 
-    catch (error) {
-      console.log("parseMetadata - Error (" + error.code + ") - " + error.message);
-      console.log("parsedMetadata - " + JSON.stringify(parsedMetadata));
-    }
-    return parsedMetadata;
-  }
-
-  function electionIdToString(electionId){
-    return "0x" + electionId?.slice(2).padStart(64, "0");
-  }
-
   const votes = events?.map((item, index) => {
-      //console.log("VOTE ON");
       const electionId = item?.args[0];
       const electionIdString = electionIdToString(electionId);
       const parsedMetadata = parseMetadata(item);
@@ -84,29 +49,7 @@ function OpenElections(props) {
         return null;
       }
   });
-  const electionResults = events?.map((item, index) => {
-      //console.log("RESULTS");
-      const electionId = item?.args[0];
-      const electionIdString = electionIdToString(electionId);  
-      const parsedMetadata = parseMetadata(item);
-      if (supportedElections.includes(electionIdString)){
-        return (
-        <div key={index}>
-          <ElectionResults event={item} 
-                    minValue={parsedMetadata?.minValue} 
-                    maxValue={parsedMetadata?.maxValue}
-                    name={parsedMetadata?.name}
-                    description={parsedMetadata?.description} 
-                    electionId={electionId}  
-                    electionIdString={electionIdString}/>
-        </div>);
-      }
-      else {
-        return null;
-      }
-  });
-  const list = (props.showResults ? electionResults : votes);
-  return <div><div>{list}</div></div>;
+  return <div><div>{votes}</div></div>;
 }
 
 export default OpenElections;
