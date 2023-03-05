@@ -8,7 +8,7 @@ import { contractABI, networks } from '@/api/_networkInfo';
 function ElectionResults(props) {
     const [median, setMedian] = useState(null);
     const [chartData, setChartData] = useState(null);
-    const [countsByNetwork, setCountsByNetwork] = useState(new Map());
+    const [countsByNetwork, setCountsByNetwork] = useState(null);
     const electionId = props.electionId;
     const electionIdString = props.electionIdString;
 

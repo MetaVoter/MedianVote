@@ -77,13 +77,33 @@ function Votes(props) {
         },
         {
           value: countsByNetwork?.get(11155111) || 1,
-          name: "sepolia",
-          color: "purple"
+          name: "Sepolia",
+          color: "#00A4D3"
         },
         {
           value: countsByNetwork?.get(5) || 1,
-          name: "goerli",
-          color: "red"
+          name: "Goerli",
+          color: "black"
+        },
+        {
+          value: countsByNetwork?.get(100) || 1,
+          name: "Gnosis",
+          color: "#3C6654"
+        },
+        {
+          value: countsByNetwork?.get(42161) || 1,
+          name: "Arbitrum",
+          color: "#279BE9"
+        },
+        {
+          value: countsByNetwork?.get(10) || 1,
+          name: "Optimism",
+          color: "#F7041F"
+        },
+        {
+          value: countsByNetwork?.get(137) || 1,
+          name: "Polygon",
+          color: "#7E42DF"
         }
       ]
     }]
