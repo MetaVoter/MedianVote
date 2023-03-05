@@ -3,7 +3,7 @@ export class VoteInformation {
     constructor(voter, value, network) {
       this.voter = voter;
       this.value = value;
-      this.network = network;
+      this.network = parseInt(network);
     } 
 } 
 
@@ -17,8 +17,8 @@ export class VoteCollection {
     }
 
     inRange(voteInfo) {
-        if ((this.minValue != null && voteInfo.value < this.minValue) ||
-            (this.maxValue != null && voteInfo.value > this.maxValue)){
+        if ((this.minValue !== null && voteInfo.value < this.minValue) ||
+            (this.maxValue !== null && voteInfo.value > this.maxValue)){
             return false;
         }
         return true;
@@ -36,7 +36,7 @@ export class VoteCollection {
         }
 
         if (this.inRange(voteInfo)){
-            this.countsByNetwork.set(voteInfo.network, this.countsByNetwork.get(voteInfo.network) + 1);
+            this.countsByNetwork.set(voteInfo.network, (this.countsByNetwork.get(voteInfo.network) || 0) + 1);
             let oldVoteInfo = this.voteInfoHash[voteInfo.voter];
             if(oldVoteInfo && oldVoteInfo.network){
                 this.countsByNetwork.set(oldVoteInfo.network, this.countsByNetwork.get(oldVoteInfo.network) - 1);
