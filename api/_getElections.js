@@ -16,7 +16,7 @@ export const supportedElectionsGnosis = [
 ];*/
 
 //export const supportedElections = supportedElectionsGnosis;
-export const networkWithContractMetadata = 100; //Gnosis //Sepolia: 11155111;
+export const networkWithContractMetadata = 11155111; //100 Gnosis //Sepolia: 11155111;
 
 //todo: why wouldn't it let me put these in a class here?
 export async function getElectionEvents(supportedElectionIds) { 
