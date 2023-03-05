@@ -22,7 +22,7 @@ function ElectionsToVoteOn(props) {
   const votes = events?.map((item, index) => {
       const electionIdString = electionIdToString(item?.args[0]);
       const parsedMetadata = parseMetadata(item);
-      if (supportedElections.includes(electionIdString)){
+      if (supportedElections.includes(electionIdString) && parsedMetadata != null){
         return (
           <div key={index}>
             <VoteOnElection event={item}
