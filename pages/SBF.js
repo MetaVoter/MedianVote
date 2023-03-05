@@ -7,7 +7,10 @@ const supportedElections = [
 
 function SBF() {
     return (
-      <PageTemplate ComponentToRender={GetElectionResults} supportedElections={supportedElections} />
+      <div>
+        <img src="/sbf_hair.gif" />
+        <GetElectionResults supportedElections={supportedElections} />
+      </div>
     );
 }
 

@@ -24,27 +24,31 @@ function ElectionResults(props) {
         return contract.queryFilter(filter, networkInfo.fromBlock, 'latest');
     }
 
+    async function getVotesAllNetworks() {
+        const networkIds = (props.networkId ? [props.networkId] : Object.keys(networks));
+        const resultsEachNetwork = await Promise.all(Object.values(networks).map(getVotesOneNetwork));
+        
+        console.log("Election - " + electionIdString);
+        const voteCollection = new VoteCollection(props.minValue, props.maxValue);
+        resultsEachNetwork?.forEach((resultForNetwork, index) => {
+            const networkId = networkIds[index];
+            resultForNetwork.forEach(event => {
+                console.log("Votes: " + event.args[0].substring(0, 5) + "..." + event.args[0].substring(event.args[0].length - 4) +
+                " - " + BigNumber.from(event.args[1]).fromTwos(32) + " - " + event.blockNumber + " - " + networkId);
+                voteCollection.addVoteInfo(new VoteInformation(event.args[0], BigNumber.from(event.args[1]).fromTwos(32), networkId));
+            });
+        });
+        return voteCollection;
+    }
+
     useEffect(() => {
         async function getVotes() {
             console.log("getVotes");
-
             try {
-                const networkIds = (props.electionId ? [props.electionId] : Object.keys(networks));
-                const resultsEachNetwork = await Promise.all(Object.values(networks).map(getVotesOneNetwork));
-                
-                console.log("Election - " + electionIdString);
-                let voteCollection = new VoteCollection(props.minValue, props.maxValue);
-                resultsEachNetwork?.forEach((resultForNetwork, index) => {
-                    const networkId = networkIds[index];
-                    resultForNetwork.forEach(event => {
-                        console.log("Votes: " + event.args[0].substring(0, 5) + "..." + event.args[0].substring(event.args[0].length - 4) +
-                        " - " + BigNumber.from(event.args[1]).fromTwos(32) + " - " + event.blockNumber + " - " + networkId);
-                        voteCollection.addVoteInfo(new VoteInformation(event.args[0], BigNumber.from(event.args[1]).fromTwos(32), networkId));
-                    });
-                });
+                const voteCollection = await getVotesAllNetworks();
                 setMedian(voteCollection.calculateMedian());
 
-                let chartData = ["Votes"].concat(voteCollection.values).map(value => [value]);
+                const chartData = ["Votes"].concat(voteCollection.values).map(value => [value]);
                 setChartData(chartData);
                 setCountsByNetwork(voteCollection.countsByNetwork);
 
