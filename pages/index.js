@@ -16,12 +16,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>  
-        <div>
-          <Web3Button icon="show" label="Connect Wallet" balance="show" />
-          <br />
-          <Web3NetworkSwitch />
-        </div>
+      <main className={styles.main}>
+        <table>
+          <tbody>
+            <tr>
+              <td><Web3Button icon="show" label="Connect Wallet" balance="show" /></td>
+              <td><Web3NetworkSwitch /></td>
+            </tr>
+          </tbody>
+        </table>
         <OpenElections/>
       </main>
     </>

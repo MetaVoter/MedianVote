@@ -4,10 +4,19 @@ import { ethers } from "ethers";
 import VoteOnElection from './_voteOnElection';
 import { contractABI, networks } from '@/api/_networkInfo';
 
+/* On Sepolia
 const supportedElections = [
   "0xa4a02534a899c2a162c9690d8f7a03f07496a48e77da6cc5c2d3a797ae47a568",
   "0xd2095dc87b3df9e79d4869b46b5aded4170c02c20a78daeaaafd04666efc5fdb"    
+];*/
+
+const supportedElections = [
+  "0xa3c105d990d3ea182af868d309153af99b246fabfcadb56f4d0d72d77b626a05",
+  "0x36c5c6d46b6440f911590909b0c22d9d506dee2b133285a92e5e8aa4e025929a",
+  "0xc0786d24bee77a8cb993105afd11e614957d4ae239a0ee4d6586053ab28d3c50"
 ];
+
+const networkWithContractMetadata = 100;
 
 function OpenElections(props) {
   const [events, setEvents] = useState(null);
@@ -15,12 +24,12 @@ function OpenElections(props) {
   useEffect(() => {
     async function getOpenElections() { 
         console.log("getOpenElections");
-        const provider = new ethers.providers.JsonRpcProvider(networks[11155111].rpcProvider);           
-        const contract = new ethers.Contract(networks[11155111].contractAddress, contractABI, provider);
+        const provider = new ethers.providers.JsonRpcProvider(networks[networkWithContractMetadata].rpcProvider);           
+        const contract = new ethers.Contract(networks[networkWithContractMetadata].contractAddress, contractABI, provider);
         
         const filter = {
-          address: networks[11155111].contractAddress,
-          fromBlock: networks[11155111].fromBlock,
+          address: networks[networkWithContractMetadata].contractAddress,
+          fromBlock: networks[networkWithContractMetadata].fromBlock,
           toBlock: 'latest',
           topics: [ ethers.utils.id('ElectionCreated(bytes32,string,bytes)')]
         };
