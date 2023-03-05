@@ -1,6 +1,5 @@
 
-//import { Web3Context } from "../api/_web3Provider";
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { ethers, BigNumber } from "ethers";
 import Votes from './_votes';
 import { VoteCollection, VoteInformation } from '@/api/_voteCollection';
@@ -12,7 +11,6 @@ function ElectionResults(props) {
     const [countsByNetwork, setCountsByNetwork] = useState(new Map());
     const electionId = props.electionId;
     const electionIdString = props.electionIdString;
-    //const web3 = useContext(Web3Context);
 
     function getVotesOneNetwork(networkInfo) {
         const provider = new ethers.providers.JsonRpcProvider(networkInfo.rpcProvider);

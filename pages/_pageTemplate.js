@@ -6,11 +6,11 @@ const inter = Inter({ subsets: ['latin'] })
 
 import { Web3Button, Web3NetworkSwitch } from '@web3modal/react'
 
-export default function Home() {
+function PageTemplate({ ComponentToRender, ...props }) {
   return (
     <>
       <Head>
-        <title>Votes</title>
+        <title>Median Vote</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -25,7 +25,10 @@ export default function Home() {
         </table>
         <br/>
         <br/>
+        <ComponentToRender {...props} />
       </main>
     </>
   )
 }
+
+export default PageTemplate;

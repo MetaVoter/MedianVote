@@ -1,6 +1,5 @@
 
-//import { Web3Context } from "../api/_web3Provider";
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ethers, BigNumber } from "ethers";
 import { contractABI, networks } from '@/api/_networkInfo';
 
@@ -24,7 +23,6 @@ function VoteOnElection(props) {
     const [currentVote, setCurrentVote] = useState("");
     const electionId = props.event?.args[0];
     const electionIdString = "0x" + props.event?.args[0].slice(2).padStart(64, "0");
-    //const web3 = useContext(Web3Context);
     
     async function onVoteClick(event, electionId) {
         if (isNaN(currentVote)) {
