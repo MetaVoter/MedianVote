@@ -25,7 +25,8 @@ function GetElectionResults(props) {
                     name={parsedMetadata?.name}
                     description={parsedMetadata?.description} 
                     electionId={electionId}  
-                    electionIdString={electionIdString}/>
+                    electionIdString={electionIdString}
+                    networkId={props.networkId}/>
         </div>);
       }
       else {

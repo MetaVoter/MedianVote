@@ -29,7 +29,7 @@ function ElectionResults(props) {
             console.log("getVotes");
 
             try {
-                const networkIds = Object.keys(networks);
+                const networkIds = (props.electionId ? [props.electionId] : Object.keys(networks));
                 const resultsEachNetwork = await Promise.all(Object.values(networks).map(getVotesOneNetwork));
                 
                 console.log("Election - " + electionIdString);
