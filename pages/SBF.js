@@ -9,7 +9,7 @@ function SBF() {
     return (
       <div>
         <img src="/sbf_hair.gif" />
-        <GetElectionResults supportedElections={supportedElections} />
+        <GetElectionResults supportedElections={supportedElections}/>
       </div>
     );
 }

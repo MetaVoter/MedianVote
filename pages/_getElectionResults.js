@@ -26,7 +26,8 @@ function GetElectionResults(props) {
                     description={parsedMetadata?.description} 
                     electionId={electionId}  
                     electionIdString={electionIdString}
-                    networkId={props.networkId}/>
+                    networkId={props.networkId}
+                    interval={props.interval}/>
         </div>);
       }
       else {

@@ -25,8 +25,8 @@ const options = {
   title: "Votes",
   legend: { position: "none" },
   histogram: {
-    bucketSize: 5,
-    //maxNumBuckets: 200,
+    //bucketSize: 5,
+    maxNumBuckets: 200,
     //minValue: 0,
     //maxValue: 30,
   },
@@ -111,21 +111,29 @@ function Votes(props) {
 
   return (
     <div>
-      <Chart
-        chartType="Histogram"
-        width="100%"
-        height="400px"
-        data={props.chartData}
-        options={options}
-      />
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <Chart
+                chartType="Histogram"
+                width="100%"
+                height="400px"
+                data={props.chartData}
+                options={options}
+              />
+            </td>
+            <td>
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={chartOptions}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <br/>
       <br/>
-      <div>
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={chartOptions}
-        />
-      </div>
     </div>
   );
 }

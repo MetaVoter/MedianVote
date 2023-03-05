@@ -9,6 +9,7 @@ function ElectionResults(props) {
     const [median, setMedian] = useState(null);
     const [chartData, setChartData] = useState(null);
     const [countsByNetwork, setCountsByNetwork] = useState(null);
+    const [hasFetchedData, setHasFetchedData] = useState(false);
     const electionId = props.electionId;
     const electionIdString = props.electionIdString;
 
@@ -42,7 +43,8 @@ function ElectionResults(props) {
     }
 
     useEffect(() => {
-        async function getVotes() {
+        let intervalId;
+        const getVotes = async () => {
             console.log("getVotes");
             try {
                 const voteCollection = await getVotesAllNetworks();
@@ -56,8 +58,21 @@ function ElectionResults(props) {
                 console.log("getVotes - Error (" + error.code + ") - " + error.message);
             }
         }
-        getVotes();
-    }, []);
+        if (props.interval != null) {
+            intervalId = setInterval(getVotes, props.interval);
+            if (!hasFetchedData) { 
+              getVotes();
+              setHasFetchedData(true);
+            }
+        } 
+        else if (!hasFetchedData) {
+            getVotes();
+            setHasFetchedData(true);
+        }        
+
+        // Return a cleanup function to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, [props.interval, hasFetchedData]);
     
     return (
     <div>        
