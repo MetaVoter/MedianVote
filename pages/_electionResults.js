@@ -20,12 +20,10 @@ function ElectionResults(props) {
 
         const filter = {
             address: networkInfo.contractAddress,
-            fromBlock: networkInfo.blockNumber,
-            toBlock: 'latest',
             topics: [ ethers.utils.id('Vote(address,bytes,bytes32)'), null, electionId]
         };
 
-        return contract.queryFilter(filter);
+        return contract.queryFilter(filter, networkInfo.fromBlock, 'latest');
     }
 
     useEffect(() => {
@@ -63,7 +61,7 @@ function ElectionResults(props) {
     <div>        
         <h2><div id={electionIdString}>{props.name}</div></h2><br/>
         <h3>Median Vote: {median}</h3><br/>
-        <i>{props.description} ({props.minValue} to {props.maxValue})</i>
+        <i>{props.description}</i>
         <br/>
         <br/>
         <Votes chartData={chartData} countsByNetwork={countsByNetwork}/>  

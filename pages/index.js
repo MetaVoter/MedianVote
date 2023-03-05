@@ -25,6 +25,8 @@ export default function Home() {
             </tr>
           </tbody>
         </table>
+        <br/>
+        <br/>
         <OpenElections/>
       </main>
     </>

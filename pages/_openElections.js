@@ -4,19 +4,21 @@ import { ethers } from "ethers";
 import VoteOnElection from './_voteOnElection';
 import { contractABI, networks } from '@/api/_networkInfo';
 
-/* On Sepolia
-const supportedElections = [
+const supportedElectionsSepolia = [
   "0xa4a02534a899c2a162c9690d8f7a03f07496a48e77da6cc5c2d3a797ae47a568",
   "0xd2095dc87b3df9e79d4869b46b5aded4170c02c20a78daeaaafd04666efc5fdb"    
-];*/
-
-const supportedElections = [
-  "0xa3c105d990d3ea182af868d309153af99b246fabfcadb56f4d0d72d77b626a05",
-  "0x36c5c6d46b6440f911590909b0c22d9d506dee2b133285a92e5e8aa4e025929a",
-  "0xc0786d24bee77a8cb993105afd11e614957d4ae239a0ee4d6586053ab28d3c50"
 ];
 
-const networkWithContractMetadata = 100;
+const supportedElectionsGnosis = [
+  "0x8e1fa6e71ff1b6dd1d7feab2285f1406c02a462a24f2089f1bc882eabc9b886b",
+  "0x5e45826af383761e5dbb6bdab61f5ea9f49d0c4cff6d83a0b4cba321f20c4170",
+  "0x8e1fa6e71ff1b6dd1d7feab2285f1406c02a462a24f2089f1bc882eabc9b886b",
+  "0x72b927b43bb31a31ab9b0b440bc736e19924d9ac3a87933c54200312effe3951",
+  "0xe5e12e2a7dee22e9a9e969eb7b41f09be791f91cc7338e049e122b9968b7f75d"
+];
+
+const supportedElections = supportedElectionsGnosis;
+const networkWithContractMetadata = 100; //11155111;
 
 function OpenElections(props) {
   const [events, setEvents] = useState(null);
@@ -29,12 +31,10 @@ function OpenElections(props) {
         
         const filter = {
           address: networks[networkWithContractMetadata].contractAddress,
-          fromBlock: networks[networkWithContractMetadata].fromBlock,
-          toBlock: 'latest',
           topics: [ ethers.utils.id('ElectionCreated(bytes32,string,bytes)')]
         };
 
-        contract.queryFilter(filter).then((events) => {
+        contract.queryFilter(filter, networks[networkWithContractMetadata].fromBlock, 'latest').then((events) => {
           //console.log("Got votes" - JSON.stringify(events));
           //events.forEach(element => console.log("Elections: " + element.args[0] + " - " + BigNumber.from(element.args[1]).fromTwos(32) + " - " + element.args[2]));                
           setEvents(events);
